@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "CCRGA Ad Compliance Checker",
+  "version": "2.0",
+  "description": "Drop a screenshot or right-click an Indian government ad to get a neutral summary and a CCRGA compliance score.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Check this ad against CCRGA guidelines"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["contextMenus", "storage", "scripting", "activeTab", "tabs"],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {}
+}

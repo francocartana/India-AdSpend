@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>CCRGA Ad Checker</title>
+<style>
+  :root {
+    --navy: #0b1636;
+    --navy-deep: #081026;
+    --orange: #e0762c;
+    --text: #eef1f8;
+    --muted: #93a0c2;
+    --card: #10193f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    width: 380px;
+    margin: 0;
+    padding: 16px;
+    background: var(--navy-deep);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+  }
+  h1 {
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    margin: 0 0 10px;
+    text-align: center;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  #dropZone {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--navy);
+    border: 3px solid var(--orange);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  #dropZone.drag-over {
+    box-shadow: 0 0 0 4px rgba(224, 118, 44, 0.35) inset;
+  }
+  #dropZone p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 0;
+  }
+  #dropZone p b { color: var(--text); }
+  #preview {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 16px;
+    display: none;
+  }
+  #fileInput { display: none; }
+
+  #status {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 10px;
+    min-height: 14px;
+  }
+
+  #result { display: none; margin-top: 12px; }
+  .error-box {
+    background: var(--card);
+    border: 1px solid rgba(224, 118, 44, 0.4);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  .error-box a { color: var(--orange); }
+
+  .score-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .score { font-size: 30px; font-weight: 800; }
+  .score-max { font-size: 13px; color: var(--muted); }
+  .green { color: #5ecb8c; }
+  .amber { color: #e0b04a; }
+  .red   { color: #e06060; }
+
+  .summary-box {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .field { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+  .field b { color: var(--text); font-weight: 600; }
+
+  ul.violations { margin: 6px 0 0; padding-left: 16px; font-size: 12px; }
+  ul.violations li { margin-bottom: 4px; }
+
+  .crit-box {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .crit-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    color: var(--muted);
+  }
+  .crit-row span:last-child { color: var(--text); font-weight: 600; }
+  code {
+    background: rgba(224, 118, 44, 0.15);
+    color: var(--orange);
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+
+  button.reset {
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--card);
+    font-size: 12px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <h1>CCRGA Ad Checker</h1>
+
+  <div id="dropZone">
+    <p id="dropText">
+      <b>Drop a screenshot</b> of an Indian government ad here,<br/>
+      or click to choose a file —<br/>
+      or right-click any ad image on a page and select<br/>
+      <b>"Check this ad with CCRGA Checker."</b>
+    </p>
+    <img id="preview" alt="preview" />
+  </div>
+  <input type="file" id="fileInput" accept="image/*" />
+
+  <button id="activateBtn" class="reset" style="margin-top:10px; border-color:var(--orange); color:var(--orange);">
+    🖱️ Activate: click any ad image on this page
+  </button>
+
+  <div id="status"></div>
+
+  <div id="result"></div>
+  <button class="reset" id="resetBtn" style="display:none;">Check another ad</button>
+
+  <div style="text-align:center; margin-top:10px;">
+    <a href="#" id="resetDirLink" style="font-size:10.5px; color:var(--muted); text-decoration:underline;">
+      Reset directory to shipped defaults
+    </a>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
